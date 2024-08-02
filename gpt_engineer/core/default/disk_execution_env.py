@@ -7,6 +7,7 @@ from typing import Optional, Tuple, Union
 from gpt_engineer.core.base_execution_env import BaseExecutionEnv
 from gpt_engineer.core.default.file_store import FileStore
 from gpt_engineer.core.files_dict import FilesDict
+from security import safe_command
 
 
 class DiskExecutionEnv(BaseExecutionEnv):
@@ -32,8 +33,7 @@ class DiskExecutionEnv(BaseExecutionEnv):
         return self.store.download()
 
     def popen(self, command: str) -> subprocess.Popen:
-        p = subprocess.Popen(
-            command,
+        p = safe_command.run(subprocess.Popen, command,
             shell=True,
             cwd=self.store.working_dir,
             stdout=subprocess.PIPE,
@@ -45,8 +45,7 @@ class DiskExecutionEnv(BaseExecutionEnv):
         start = time.time()
         print("\n--- Start of run ---")
         # while running, also print the stdout and stderr
-        p = subprocess.Popen(
-            command,
+        p = safe_command.run(subprocess.Popen, command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=self.store.working_dir,

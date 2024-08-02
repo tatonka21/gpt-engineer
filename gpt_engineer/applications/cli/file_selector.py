@@ -29,6 +29,7 @@ import toml
 from gpt_engineer.core.default.disk_memory import DiskMemory
 from gpt_engineer.core.default.paths import metadata_path
 from gpt_engineer.core.files_dict import FilesDict
+from security import safe_command
 
 
 class FileSelector:
@@ -158,14 +159,14 @@ class FileSelector:
         # Try the preferred editor first, then fallback to common editors
         if chosen_editor:
             try:
-                subprocess.run([chosen_editor, file_path])
+                safe_command.run(subprocess.run, [chosen_editor, file_path])
                 return
             except Exception:
                 pass
 
         for editor in editors:
             try:
-                subprocess.run([editor, file_path])
+                safe_command.run(subprocess.run, [editor, file_path])
                 return
             except Exception:
                 continue
