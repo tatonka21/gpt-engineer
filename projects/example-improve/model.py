@@ -1,6 +1,6 @@
-import random
 
 from dataclasses import dataclass
+import secrets
 
 
 @dataclass
@@ -16,7 +16,7 @@ class Game:
         self.is_running = True
 
     def generate_food(self):
-        return Point(random.randint(0, 10), random.randint(0, 10))
+        return Point(secrets.SystemRandom().randint(0, 10), secrets.SystemRandom().randint(0, 10))
 
     def update(self):
         # Move the snake
